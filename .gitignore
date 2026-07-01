@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# 环境变量（包含密码/飞书凭证，必须不推）
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 本地预览日志
+*.log
+/cloudflared.log
+/ngrok.log
+/tunnel.log
+
+# 本地临时
+start.sh
+*.local.json
+
+# 旧版隧道脚本（Vercel 部署后用不上）
+start-ngrok.sh

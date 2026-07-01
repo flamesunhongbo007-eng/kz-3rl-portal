@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { min-height: 100vh; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+  background: #080D18;
+  color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* ========== Tzafit 风格核心 ========== */
+.animated-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% -10%, rgba(0,215,160,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 85% 50%, rgba(0,100,220,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 35% at 15% 75%, rgba(0,155,119,0.04) 0%, transparent 50%),
+    linear-gradient(175deg, #0A101E 0%, #070C16 55%, #080D18 100%);
+}
+
+/* 网格背景（hero 用） */
+.cad-bg {
+  background:
+    linear-gradient(rgba(0,215,160,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,215,160,0.025) 1px, transparent 1px);
+  background-size: 55px 55px;
+}
+
+.glass {
+  background: rgba(255,255,255,0.025);
+  backdrop-filter: blur(10px) saturate(1.3);
+  -webkit-backdrop-filter: blur(10px) saturate(1.3);
+  border: 1px solid rgba(0,215,160,0.18);
+  border-radius: 12px;
+}
+
+.glass-soft {
+  background: rgba(255,255,255,0.025);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,215,160,0.18);
+  border-radius: 10px;
+}
+
+.gradient-border {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0,215,160,0.04), rgba(0,215,160,0.02));
+  border-radius: 12px;
+  border: 1px solid rgba(0,215,160,0.18);
+}
+
+/* Tzafit 风格的扫描线 */
+.scan-line {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #00D7A0, transparent);
+  animation: scanDown 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes scanDown {
+  0% { top: 0; opacity: 0; }
+  5%, 95% { opacity: 0.35; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* 粒子 */
+.particle {
+  position: absolute; border-radius: 50%;
+  background: #00D7A0; opacity: 0;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0% { opacity: 0; transform: translateY(100vh) scale(0.5); }
+  8% { opacity: 0.8; }
+  88% { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(-80px) scale(0.2); }
+}
+
+/* 旋转轨道环（hero 用） */
+.spin-slow { animation: spin 80s linear infinite; }
+.spin-rev  { animation: spinRev 40s linear infinite; }
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes spinRev  { to { transform: rotate(-360deg); } }
+
+/* Blink 点 */
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #00D7A0;
+  box-shadow: 0 0 8px #00D7A0;
+  animation: blink 2.2s infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(8,13,24,0.5); }
+::-webkit-scrollbar-thumb { background: rgba(0,215,160,0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,215,160,0.5); }
+
+/* 进度条 */
+.pbar { height: 6px; background: rgba(0,215,160,0.12); border-radius: 3px; overflow: hidden; }
+.pbar-fill { height: 100%; background: #00D7A0; border-radius: 3px; transition: width 0.4s; }
+
+/* 标签 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  background: rgba(0,215,160,0.08);
+  border: 1px solid rgba(0,215,160,0.2);
+  color: #00D7A0;
+}
+.tag-running { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.3); color: #4ade80; }
+.tag-danger  { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+.tag-warn    { background: rgba(234,179,8,0.12); border-color: rgba(234,179,8,0.3); color: #facc15; }
+.tag-info    { background: rgba(0,215,160,0.12); border-color: rgba(0,215,160,0.3); color: #33e0b6; }
+
+/* Leaflet 暗色主题 */
+.leaflet-container { background: #0A101E; }
+.leaflet-tile { filter: brightness(0.6) invert(1) contrast(0.9) hue-rotate(180deg) saturate(0.4) brightness(0.7); }
