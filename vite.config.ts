@@ -7,16 +7,28 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },
+  build: {
+    // 文件名固定，不要 hash（避免 Cloudflare 缓存不一致）
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/index.js',
+        chunkFileNames: 'assets/index.js',
+        assetFileNames: 'assets/[name]-[hash][extname]',
+      },
+    },
+  },
   server: {
     port: 5173,
     host: '127.0.0.1',
     allowedHosts: [
       'localhost',
       '127.0.0.1',
-      '.trycloudflare.com',  // 允许所有 trycloudflare.com 子域名（每次重启 URL 变）
-      '.ngrok-free.app',     // 兼容未来用 ngrok
+      '.trycloudflare.com',
+      '.ngrok-free.app',
       '.ngrok.app',
-      '.vercel.app',         // 允许 Vercel 部署域名
+      '.vercel.app',
+      '.pages.dev',           // Cloudflare Pages
+      '.cloudflare.com',
     ],
     proxy: {
       '/api/feishu': {
