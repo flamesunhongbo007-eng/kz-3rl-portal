@@ -45,11 +45,58 @@
     </div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // React 挂载后移除加载动画
-      setTimeout(() => {
-        const boot = document.getElementById('boot');
-        if (boot) { boot.style.opacity = '0'; setTimeout(() => boot.remove(), 500); }
-      }, 300);
+      // React 挂载成功后才移除加载动画（观察 #root 内是否已渲染出子节点）
+      (function () {
+        var boot = document.getElementById('boot');
+        var root = document.getElementById('root');
+        if (!boot || !root) return;
+
+        var removed = false;
+        function removeBoot() {
+          if (removed) return;
+          removed = true;
+          boot.style.opacity = '0';
+          setTimeout(function () { boot && boot.remove(); }, 400);
+        }
+
+        // 1) 用 MutationObserver 监听 #root，一旦有子节点插入（React 挂载成功）立即移除
+        var mo = new MutationObserver(function () {
+          if (root.childNodes.length > 0) {
+            mo.disconnect();
+            removeBoot();
+          }
+        });
+        mo.observe(root, { childList: true });
+
+        // 2) 兜底：15 秒还没挂载 → 显示错误提示，不再让用户对着黑屏
+        setTimeout(function () {
+          if (root.childNodes.length === 0) {
+            mo.disconnect();
+            boot.innerHTML =
+              '<div style="max-width:520px;padding:28px 32px;border:1px solid rgba(0,215,160,0.35);' +
+              'border-radius:12px;background:rgba(0,215,160,0.04);color:#fff;text-align:center;' +
+              'font-family:var(--font-sans);">' +
+              '<div style="font-size:14px;font-weight:700;letter-spacing:2px;color:#00D7A0;' +
+              'text-transform:uppercase;margin-bottom:12px;">加载失败 · Load Failed</div>' +
+              '<div style="font-size:13px;line-height:1.7;color:#c8d4e0;margin-bottom:14px;">' +
+              '页面资源加载失败，可能是网络问题或部署缓存问题。<br/>' +
+              '请按 <b>Ctrl/Cmd + Shift + R</b> 强制刷新；<br/>' +
+              '若仍无效，请截图 <b>F12 → Console / Network</b> 报错发管理员。' +
+              '</div>' +
+              '<button onclick="location.reload()" style="cursor:pointer;padding:8px 20px;' +
+              'border-radius:8px;border:1px solid #00D7A0;background:rgba(0,215,160,0.12);' +
+              'color:#00D7A0;font-size:12px;font-weight:700;letter-spacing:1.5px;' +
+              'text-transform:uppercase;">重新加载</button>' +
+              '</div>';
+          }
+        }, 15000);
+
+        // 3) 捕获 JS 运行时错误，把错误信息也带出来（便于线上排查）
+        window.addEventListener('error', function (e) {
+          if (root.childNodes.length > 0) return;
+          console.error('[boot] script error:', e.message, e.filename);
+        });
+      })();
     </script>
   </body>
 </html>
