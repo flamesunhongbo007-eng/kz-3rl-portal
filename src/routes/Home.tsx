@@ -48,7 +48,7 @@ export function HomePage() {
   ];
 
   return (
-    <PublicLayout>
+    <PublicLayout fullBleed>
       {/* ============ HERO ============ */}
       <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-16">
         {/* 背景层 */}
