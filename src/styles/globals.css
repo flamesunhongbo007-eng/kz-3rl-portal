@@ -145,3 +145,20 @@ body {
 /* Leaflet 暗色主题 */
 .leaflet-container { background: #0A101E; }
 .leaflet-tile { filter: brightness(0.6) invert(1) contrast(0.9) hue-rotate(180deg) saturate(0.4) brightness(0.7); }
+
+/* 卫星底图（首页总平面图）不能被 invert 处理 —— 用 .satellite 类关掉全局 filter */
+.satellite .leaflet-tile { filter: brightness(0.95) contrast(1.05) saturate(1.1); }
+.satellite .leaflet-container { background: #0a1018; }
+
+/* 站点/标签 tooltip（RailwayPlanMap 用） */
+.rlp-tip {
+  background: rgba(8, 13, 24, 0.92) !important;
+  border: 1px solid rgba(0, 215, 160, 0.4) !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+.rlp-tip::before { border-top-color: rgba(0, 215, 160, 0.4) !important; }
+.rlp-tip-station { font-weight: 700; }

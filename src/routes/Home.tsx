@@ -3,6 +3,7 @@ import { PublicLayout } from '@/components/layout/PublicLayout';
 import { dataApi } from '@/lib/api';
 import type { Section, ContentItem, Milestone, Risk } from '@/lib/types';
 import { isMockMode } from '@/lib/config';
+import { RailwayPlanMap } from '@/components/map/RailwayPlanMap';
 
 export function HomePage() {
   const mock = isMockMode();
@@ -202,7 +203,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ============ TECHNOLOGY：铁路 5 段式解剖图 ============ */}
+      {/* ============ TECHNOLOGY：铁路总平面图 ============ */}
       <section>
         <div className="max-w-[1380px] mx-auto px-10 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* 文字 */}
@@ -234,80 +235,42 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* 5 段式铁路解剖图 */}
-          <div className="relative rounded-[18px] overflow-hidden border border-teal/20 min-h-[420px] flex flex-col" style={{ background: 'linear-gradient(135deg, #0e1a28, #0a1018)' }}>
-            <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(0,215,160,0.08), transparent 70%)' }} />
-
-            {/* 顶部：标签 + 5 个圆点 */}
-            <div className="relative z-10 flex items-center justify-between px-4 py-3">
-              <span className="text-[10px] font-bold tracking-[1.5px] uppercase text-teal">铁路纵断面图 · AK0 — AK302+436</span>
-              <div className="flex gap-1.5">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <div key={i} className={`w-2 h-2 rounded-full border border-teal/30 cursor-pointer transition-colors ${i === 0 ? 'bg-teal' : 'bg-teal/10'}`} />
-                ))}
+          {/* 铁路总平面图 · 卫星底图 + 302.4 km 正线 */}
+          <div className="relative rounded-[18px] overflow-hidden border border-teal/20 min-h-[520px] flex flex-col" style={{ background: 'linear-gradient(135deg, #0e1a28, #0a1018)' }}>
+            {/* 顶部：标签 + 图例 */}
+            <div className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-teal/15">
+              <span className="text-[10px] font-bold tracking-[1.5px] uppercase text-teal">铁路总平面图 · AK0 — AK302+436</span>
+              <div className="flex items-center gap-3 text-[9px] font-bold tracking-[1px] uppercase text-ink-dim">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="inline-block w-2 h-2 rounded-full" style={{ background: '#22c55e' }} />
+                  阿亚古孜
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="inline-block w-4 h-0.5" style={{ background: '#00D7A0' }} />
+                  正线 302.4 km
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="inline-block w-2 h-2 rounded-full" style={{ background: '#f97316' }} />
+                  巴赫特
+                </span>
               </div>
             </div>
 
-            <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" className="relative z-10 w-full" style={{ display: 'block' }}>
-              <defs>
-                <linearGradient id="earthwork" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a3a5c" /><stop offset="100%" stopColor="#0d2a45" /></linearGradient>
-                <linearGradient id="bridge" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#003d30" /><stop offset="100%" stopColor="#005a44" /></linearGradient>
-                <linearGradient id="tunnel" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a1a2e" /><stop offset="100%" stopColor="#0d0d20" /></linearGradient>
-                <linearGradient id="track" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#005a44" /><stop offset="100%" stopColor="#003d30" /></linearGradient>
-                <linearGradient id="elec" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a1800" /><stop offset="100%" stopColor="#7a2800" /></linearGradient>
-              </defs>
+            {/* 卫星底图 + 线路 */}
+            <div className="relative z-10 flex-1">
+              <RailwayPlanMap height={460} />
+            </div>
 
-              {/* 标题 */}
-              <text x="360" y="22" textAnchor="middle" fill="#00D7A0" fontSize="11" fontWeight="700" letterSpacing="1">阿亚古孜—巴赫特 · 铁路纵断面剖视图</text>
-              <text x="360" y="38" textAnchor="middle" fill="#667788" fontSize="8">302.4 km 正线 · 1520 mm 宽轨 · 阿拜州 · 非电气化</text>
-
-              {/* 5 段：路基 / 桥涵 / 站场 / 轨道 / 道口（去掉了电气化）*/}
-              <rect x="30" y="60" width="150" height="100" fill="url(#earthwork)" />
-              <text x="105" y="190" textAnchor="middle" fill="#4a9aca" fontSize="9" fontWeight="700">路基工程</text>
-              <text x="105" y="204" textAnchor="middle" fill="#336688" fontSize="7">EARTHWORK</text>
-              <text x="105" y="216" textAnchor="middle" fill="#336688" fontSize="7">~ 1,800 万方</text>
-
-              <rect x="180" y="60" width="120" height="100" fill="url(#bridge)" />
-              <rect x="195" y="100" width="12" height="60" fill="#007755" />
-              <rect x="232" y="100" width="12" height="60" fill="#007755" />
-              <rect x="269" y="100" width="12" height="60" fill="#007755" />
-              <rect x="180" y="78" width="120" height="12" fill="#00D7A0" opacity="0.5" />
-              <text x="240" y="190" textAnchor="middle" fill="#00a080" fontSize="9" fontWeight="700">桥涵工程</text>
-              <text x="240" y="204" textAnchor="middle" fill="#005540" fontSize="7">BRIDGES &amp; CULVERTS</text>
-              <text x="240" y="216" textAnchor="middle" fill="#005540" fontSize="7">约 280 处</text>
-
-              <rect x="300" y="60" width="80" height="100" fill="url(#tunnel)" />
-              <text x="340" y="190" textAnchor="middle" fill="#778899" fontSize="9" fontWeight="700">站场工程</text>
-              <text x="340" y="204" textAnchor="middle" fill="#556677" fontSize="7">STATIONS</text>
-              <text x="340" y="216" textAnchor="middle" fill="#556677" fontSize="7">14 座 · 130.7 km</text>
-
-              <rect x="380" y="60" width="220" height="100" fill="url(#track)" />
-              <rect x="400" y="100" width="180" height="6" fill="#00D7A0" />
-              <rect x="400" y="115" width="180" height="6" fill="#00D7A0" />
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((i) => (
-                <rect key={i} x={400 + i * 13} y="96" width="8" height="28" fill="#1a1a1a" stroke="#444" />
-              ))}
-              <ellipse cx="490" cy="135" rx="90" ry="8" fill="#3a3a3a" opacity="0.5" />
-              <text x="490" y="190" textAnchor="middle" fill="#00D7A0" fontSize="9" fontWeight="700">轨道工程</text>
-              <text x="490" y="204" textAnchor="middle" fill="#009980" fontSize="7">TRACK</text>
-              <text x="490" y="216" textAnchor="middle" fill="#009980" fontSize="7">302.4 km 正线</text>
-
-              <rect x="600" y="60" width="90" height="100" fill="url(#elec)" />
-              <text x="645" y="110" textAnchor="middle" fill="#ff8844" fontSize="9" fontWeight="700">非电气化</text>
-              <text x="645" y="124" textAnchor="middle" fill="#884422" fontSize="7">NON-ELECTRIFIED</text>
-              <text x="645" y="138" textAnchor="middle" fill="#884422" fontSize="7">内燃机车牵引</text>
-              <text x="645" y="190" textAnchor="middle" fill="#ff8844" fontSize="9" fontWeight="700">机务设施</text>
-              <text x="645" y="204" textAnchor="middle" fill="#884422" fontSize="7">LOCOMOTIVE</text>
-              <text x="645" y="216" textAnchor="middle" fill="#884422" fontSize="7">整备场 · 加油点</text>
-
-              <line x1="30" y1="160" x2="690" y2="160" stroke="#00D7A0" strokeWidth="0.5" strokeDasharray="3,2" opacity="0.3" />
-              <path d="M 690,160 L 700,160" stroke="#00D7A0" strokeWidth="2" />
-              <text x="710" y="164" fill="#00D7A0" fontSize="10" fontWeight="700">→</text>
-            </svg>
-
-            {/* 底部信息 */}
-            <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-md text-[10px] font-bold tracking-[1.5px] uppercase z-20" style={{ background: 'rgba(8,13,24,0.85)', border: '1px solid rgba(0,215,160,0.18)', color: '#00D7A0', backdropFilter: 'blur(8px)' }}>
-              五段基础设施工程
+            {/* 底部信息条 */}
+            <div className="relative z-10 flex items-center justify-between px-4 py-2.5 border-t border-teal/15 bg-black/30">
+              <div className="flex items-center gap-4 text-[10px] font-mono text-ink-dim">
+                <span>📍 阿拜州 · 哈萨克斯坦</span>
+                <span className="hidden md:inline text-teal/50">|</span>
+                <span className="hidden md:inline">4 大土建标段 · 14 座站场</span>
+              </div>
+              <div className="px-2.5 py-1 rounded-md text-[10px] font-bold tracking-[1.5px] uppercase" style={{ background: 'rgba(0,215,160,0.1)', border: '1px solid rgba(0,215,160,0.25)', color: '#00D7A0' }}>
+                Esri 卫星底图
+              </div>
             </div>
           </div>
         </div>
